@@ -1,4 +1,4 @@
-FROM node:14-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 ARG API_URL
 ADD package.json yarn.lock /app/
@@ -6,11 +6,6 @@ RUN yarn install
 ADD . /app/
 RUN REACT_APP_API_URL=${API_URL} \
   yarn build
-
-FROM node:14-alpine
-ENV NODE_ENV production
-WORKDIR /app
-COPY --from=build /app/build/ /app/
 
 FROM nginx:alpine
 ENV PORT 8080

@@ -10,7 +10,8 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   (error: AxiosError) => {
-    const message = error.response?.data?.message ?? 'Erro interno no servidor.'
+    const data = error.response?.data as { message?: string } | undefined
+    const message = data?.message ?? 'Erro interno no servidor.'
     const statusCode = error.response?.status ?? 500
 
     return Promise.reject(new AppError(message, statusCode))
