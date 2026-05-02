@@ -10,12 +10,15 @@ export const getComponents = async (
       page: filter.page,
       limit: filter.limit,
       search: filter.search?.trim(),
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
     },
   })
 
   return {
     results: response.data.results,
     total: response.data.total,
+    meta: response.data.meta,
   }
 }
 
@@ -30,6 +33,8 @@ export const getComponentLogs = async (
         page: filter.page,
         limit: filter.limit,
         type: filter.type || undefined,
+        sortBy: filter.sortBy,
+        sortOrder: filter.sortOrder,
       },
     }
   )
@@ -37,6 +42,7 @@ export const getComponentLogs = async (
   return {
     results: response.data.results,
     total: response.data.total,
+    meta: response.data.meta,
   }
 }
 

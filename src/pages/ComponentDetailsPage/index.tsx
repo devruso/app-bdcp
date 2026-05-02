@@ -49,6 +49,8 @@ export interface ComponentLogListFilter extends ListFilter {
 const initialFilter: ComponentLogListFilter = {
   page: 0,
   limit: 10,
+  sortBy: 'createdAt',
+  sortOrder: 'DESC',
 }
 
 const Tab: React.FC = ({ children }) => {
@@ -298,6 +300,12 @@ export const ComponentDetailsPage: React.FC = () => {
                 totalPages={Math.ceil(componentLogs.total / filter.limit)}
                 onPageChange={page => setFilter({ ...filter, page })}
                 onTypeChange={type => setFilter({ ...filter, page: 0, type })}
+                onSortByChange={sortBy =>
+                  setFilter({ ...filter, page: 0, sortBy })
+                }
+                onSortOrderChange={sortOrder =>
+                  setFilter({ ...filter, page: 0, sortOrder })
+                }
               />
             )}
           </TabPanel>

@@ -4,6 +4,7 @@ import {
   Text,
   Box,
   HStack,
+  Select,
   Button,
   useDisclosure,
   Tooltip,
@@ -11,6 +12,7 @@ import {
 import React, { useEffect, useState } from 'react'
 
 import api from 'api'
+import { Search } from 'components/Search'
 import { ListData, ListFilter, User } from 'types'
 
 import { InviteModal } from './InviteModal'
@@ -21,6 +23,8 @@ export interface UserListFilter extends ListFilter {}
 const initialFilter: UserListFilter = {
   page: 0,
   limit: 10,
+  sortBy: 'createdAt',
+  sortOrder: 'DESC',
 }
 
 export const UserListPage: React.FC = () => {
@@ -88,6 +92,56 @@ export const UserListPage: React.FC = () => {
               Gerar convite
             </Button>
           </Tooltip>
+        </Box>
+      </HStack>
+
+      <HStack pb={8} spacing={4} alignItems='flex-end'>
+        <Box flex={1}>
+          <Search
+            value={filter.search}
+            placeholder='Nome ou e-mail do usuário'
+            onChangeValue={search =>
+              setFilter({ ...filter, page: 0, search: search || undefined })
+            }
+          />
+        </Box>
+
+        <Box minW='220px'>
+          <Text mb={2} color='gray.700' fontSize='sm'>Ordenar por</Text>
+          <Select
+            size='lg'
+            variant='filled'
+            bgColor='gray.100'
+            value={filter.sortBy}
+            onChange={event =>
+              setFilter({ ...filter, page: 0, sortBy: event.target.value })
+            }
+          >
+            <option value='createdAt'>Data de cadastro</option>
+            <option value='name'>Nome</option>
+            <option value='email'>E-mail</option>
+            <option value='role'>Tipo</option>
+          </Select>
+        </Box>
+
+        <Box minW='180px'>
+          <Text mb={2} color='gray.700' fontSize='sm'>Direção</Text>
+          <Select
+            size='lg'
+            variant='filled'
+            bgColor='gray.100'
+            value={filter.sortOrder}
+            onChange={event =>
+              setFilter({
+                ...filter,
+                page: 0,
+                sortOrder: event.target.value as 'ASC' | 'DESC',
+              })
+            }
+          >
+            <option value='DESC'>Decrescente</option>
+            <option value='ASC'>Crescente</option>
+          </Select>
         </Box>
       </HStack>
 

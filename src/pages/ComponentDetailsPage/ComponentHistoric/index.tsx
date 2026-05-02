@@ -20,6 +20,8 @@ export interface ComponentHistoricProps {
   totalPages: number
   onPageChange: (page: number) => void
   onTypeChange: (type: ComponentLog['type']) => void
+  onSortByChange: (sortBy: string) => void
+  onSortOrderChange: (sortOrder: 'ASC' | 'DESC') => void
 }
 
 const logLabelMap = {
@@ -34,30 +36,70 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
   totalPages,
   onPageChange,
   onTypeChange,
+  onSortByChange,
+  onSortOrderChange,
 }) => {
-  const form = useForm()
+  const form = useForm({
+    defaultValues: {
+      type: '',
+      sortBy: 'createdAt',
+      sortOrder: 'DESC',
+    },
+  })
 
   const hasPreviousPage = currentPage >= 1
   const hasNextPage = currentPage + 1 < totalPages
+  const selectedType = form.watch('type')
+  const selectedSortBy = form.watch('sortBy')
+  const selectedSortOrder = form.watch('sortOrder')
 
   useEffect(() => {
-    onTypeChange(form.getValues().type)
-  }, [form.watch('type')])
+    onTypeChange(selectedType as ComponentLog['type'])
+  }, [selectedType])
+
+  useEffect(() => {
+    onSortByChange(selectedSortBy)
+  }, [selectedSortBy])
+
+  useEffect(() => {
+    onSortOrderChange(selectedSortOrder as 'ASC' | 'DESC')
+  }, [selectedSortOrder])
 
   return (
     <Box h='full'>
-      <Box w='fit-content' mb={6}>
-        <SelectInput
-          name='type'
-          label='Tipo de operação'
-          control={form.control}
-        >
-          <option value=''>Todos</option>
-          <option value='approval'>Aprovação</option>
-          <option value='creation'>Criação</option>
-          <option value='draft_update'>Atualização</option>
-        </SelectInput>
-      </Box>
+      <HStack w='fit-content' mb={6} spacing={4} alignItems='flex-end'>
+        <Box minW='220px'>
+          <SelectInput
+            name='type'
+            label='Tipo de operação'
+            control={form.control}
+          >
+            <option value=''>Todos</option>
+            <option value='approval'>Aprovação</option>
+            <option value='creation'>Criação</option>
+            <option value='draft_update'>Atualização</option>
+          </SelectInput>
+        </Box>
+
+        <Box minW='180px'>
+          <SelectInput name='sortBy' label='Ordenar por' control={form.control}>
+            <option value='createdAt'>Data</option>
+            <option value='type'>Operação</option>
+            <option value='updatedBy'>Nome</option>
+          </SelectInput>
+        </Box>
+
+        <Box minW='180px'>
+          <SelectInput
+            name='sortOrder'
+            label='Direção'
+            control={form.control}
+          >
+            <option value='DESC'>Decrescente</option>
+            <option value='ASC'>Crescente</option>
+          </SelectInput>
+        </Box>
+      </HStack>
 
       <Box
         overflow='hidden'

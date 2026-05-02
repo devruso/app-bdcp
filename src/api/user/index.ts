@@ -7,12 +7,15 @@ export const getUsers = async (filter: ListFilter): Promise<ListData<User>> => {
       page: filter.page,
       limit: filter.limit,
       search: filter.search?.trim(),
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
     },
   })
 
   return {
     results: response.data.results,
     total: response.data.total,
+    meta: response.data.meta,
   }
 }
 

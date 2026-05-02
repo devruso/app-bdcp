@@ -7,6 +7,7 @@ import {
   Heading,
   HStack,
   List,
+  Select,
   Text,
   VStack,
   useBreakpointValue,
@@ -43,6 +44,8 @@ interface ComponentListFilter extends ListFilter {
 const initialFilter: ComponentListFilter = {
   page: 0,
   limit: 10,
+  sortBy: 'code',
+  sortOrder: 'ASC',
 }
 
 export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
@@ -102,6 +105,8 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
 
     const updatedFilter = {
       ...initialFilter,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       search: searchText || undefined,
     }
 
@@ -159,7 +164,57 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
           </Box>
 
           <Box pt={4} py={8} px={8}>
-            <Search value={searchText} onChangeValue={setSearchText} />
+            <VStack spacing={4} alignItems='stretch'>
+              <Search value={searchText} onChangeValue={setSearchText} />
+
+              <HStack alignItems='flex-end'>
+                <Box flex={1}>
+                  <Text color='gray.700' fontSize='sm' mb={2}>
+                    Ordenar por
+                  </Text>
+                  <Select
+                    size='lg'
+                    variant='filled'
+                    bgColor='gray.100'
+                    value={filter.sortBy}
+                    onChange={event =>
+                      setFilter({
+                        ...filter,
+                        page: 0,
+                        sortBy: event.target.value,
+                      })
+                    }
+                  >
+                    <option value='code'>Código</option>
+                    <option value='name'>Nome</option>
+                    <option value='department'>Departamento</option>
+                    <option value='updatedAt'>Atualização</option>
+                  </Select>
+                </Box>
+
+                <Box minW='180px'>
+                  <Text color='gray.700' fontSize='sm' mb={2}>
+                    Direção
+                  </Text>
+                  <Select
+                    size='lg'
+                    variant='filled'
+                    bgColor='gray.100'
+                    value={filter.sortOrder}
+                    onChange={event =>
+                      setFilter({
+                        ...filter,
+                        page: 0,
+                        sortOrder: event.target.value as 'ASC' | 'DESC',
+                      })
+                    }
+                  >
+                    <option value='ASC'>Crescente</option>
+                    <option value='DESC'>Decrescente</option>
+                  </Select>
+                </Box>
+              </HStack>
+            </VStack>
           </Box>
 
           <List

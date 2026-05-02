@@ -11,6 +11,8 @@ export const getComponentDrafts = async (
         page: filter.page,
         limit: filter.limit,
         search: filter.search?.trim(),
+        sortBy: filter.sortBy,
+        sortOrder: filter.sortOrder,
       },
     }
   )
@@ -18,6 +20,7 @@ export const getComponentDrafts = async (
   return {
     results: response.data.results,
     total: response.data.total,
+    meta: response.data.meta,
   }
 }
 

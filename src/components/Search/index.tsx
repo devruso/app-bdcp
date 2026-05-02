@@ -5,9 +5,14 @@ import React from 'react'
 export interface SearchProps {
   value?: string
   onChangeValue?: (value: string) => void
+  placeholder?: string
 }
 
-export const Search: React.FC<SearchProps> = ({ value, onChangeValue }) => {
+export const Search: React.FC<SearchProps> = ({
+  value,
+  onChangeValue,
+  placeholder = 'Código ou nome da disciplina',
+}) => {
   return (
     <Box>
       <InputGroup>
@@ -18,7 +23,7 @@ export const Search: React.FC<SearchProps> = ({ value, onChangeValue }) => {
           borderWidth={2}
           borderColor='transparent'
           bgColor='gray.100'
-          placeholder='Código ou nome da disciplina'
+          placeholder={placeholder}
           value={value}
           onChange={event => onChangeValue?.(event.target.value)}
           _focus={{ borderWidth: 2, borderColor: 'primary.500' }}
